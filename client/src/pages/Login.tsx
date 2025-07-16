@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -54,7 +53,7 @@ const Login: React.FC = () => {
 
         localStorage.setItem("token", res.data.token);
         toast.success("Login successful!");
-        navigate("/"); 
+        navigate("/");
       } catch (err: any) {
         setErrors({ email: "Invalid credentials" });
       }
@@ -103,7 +102,7 @@ const Login: React.FC = () => {
                   errors.password ? "border-red-500" : "border-black"
                 }`}
               />
-         
+
               <span
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 cursor-pointer"
                 onClick={() => setShowPassword((prev) => !prev)}

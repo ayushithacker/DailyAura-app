@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import api from "../api/api";
 
@@ -40,7 +39,7 @@ const Journal: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      // const token = localStorage.getItem("token"); 
+      // const token = localStorage.getItem("token");
 
       const response = await api.post(
         "/journal",
@@ -52,7 +51,7 @@ const Journal: React.FC = () => {
           reading: { status: reading },
           katha: { status: katha },
           gratitude,
-        },
+        }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,

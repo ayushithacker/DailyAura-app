@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";

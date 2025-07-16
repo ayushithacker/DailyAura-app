@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
-import axios from "axios";
 import api from "../api/api";
 
 const Dashboard: React.FC = () => {
-    const { user } = useUser();
+  const { user } = useUser();
   const todayDisplay = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
     year: "numeric",
@@ -35,7 +34,9 @@ const Dashboard: React.FC = () => {
           // },
         });
 
-        const todayEntry = res.data.find((entry: any) => entry.date === todayDateStr);
+        const todayEntry = res.data.find(
+          (entry: any) => entry.date === todayDateStr
+        );
         setTodayJournal(todayEntry || null);
       } catch (err) {
         console.error("Error fetching journal", err);
@@ -58,43 +59,48 @@ const Dashboard: React.FC = () => {
         </p>
         <div className="text-md text-gray-600">{todayDisplay}</div>
       </div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  {/* 🕉️ Daily Devotion */}
-  <div className="bg-blue-50 w-full rounded-lg p-6">
-    <p className="font-bold text-xl mb-4">🕉️ Daily Devotion</p>
-    {todayJournal ? (
-      <ul className="text-gray-700 space-y-1">
-        <li>
-          📿 <strong>Chanting:</strong> {todayJournal.chanting.status}
-          {todayJournal.chanting.status === "yes" ? ` (${todayJournal.chanting.rounds} rounds)` : ""}
-        </li>
-        <li>
-          📖 <strong>Reading:</strong> {todayJournal.reading.status}
-        </li>
-        <li>
-          🎧 <strong>Katha:</strong> {todayJournal.katha.status}
-        </li>
-      </ul>
-    ) : (
-      <p className="text-gray-700">No devotional activities filled for today.</p>
-    )}
-  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {/* 🕉️ Daily Devotion */}
+        <div className="bg-blue-50 w-full rounded-lg p-6">
+          <p className="font-bold text-xl mb-4">🕉️ Daily Devotion</p>
+          {todayJournal ? (
+            <ul className="text-gray-700 space-y-1">
+              <li>
+                📿 <strong>Chanting:</strong> {todayJournal.chanting.status}
+                {todayJournal.chanting.status === "yes"
+                  ? ` (${todayJournal.chanting.rounds} rounds)`
+                  : ""}
+              </li>
+              <li>
+                📖 <strong>Reading:</strong> {todayJournal.reading.status}
+              </li>
+              <li>
+                🎧 <strong>Katha:</strong> {todayJournal.katha.status}
+              </li>
+            </ul>
+          ) : (
+            <p className="text-gray-700">
+              No devotional activities filled for today.
+            </p>
+          )}
+        </div>
 
-  {/* 📔 Journal - Gratitude only */}
-  <div className="bg-blue-50 w-full rounded-md min-h-40 p-6">
-    <p className="font-bold text-xl mb-4">📔 Journal</p>
-    {todayJournal ? (
-      <div className="text-gray-800">
-        <p>
-          <strong>🙏 Gratitude:</strong> {todayJournal.gratitude}
-        </p>
+        {/* 📔 Journal - Gratitude only */}
+        <div className="bg-blue-50 w-full rounded-md min-h-40 p-6">
+          <p className="font-bold text-xl mb-4">📔 Journal</p>
+          {todayJournal ? (
+            <div className="text-gray-800">
+              <p>
+                <strong>🙏 Gratitude:</strong> {todayJournal.gratitude}
+              </p>
+            </div>
+          ) : (
+            <p className="text-gray-700">
+              You haven’t written today's journal yet.
+            </p>
+          )}
+        </div>
       </div>
-    ) : (
-      <p className="text-gray-700">You haven’t written today's journal yet.</p>
-    )}
-  </div>
-</div>
-
 
       <div className="my-6">
         <div className="bg-blue-50 rounded-md p-6 flex flex-col items-center">

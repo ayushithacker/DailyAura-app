@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../api/api";
@@ -20,15 +19,12 @@ const ForgotPassword: React.FC = () => {
     }
     console.log("Sending request to backend...");
     try {
-      await toast.promise(
-        api.post("/forgot-password", { email }),
-        {
-          loading: "Sending reset link...",
-          success: (res) => res.data.message || "Reset link sent successfully!",
-          error: (err) =>
-            err?.response?.data?.error || "Something went wrong. Try again.",
-        }
-      );
+      await toast.promise(api.post("/forgot-password", { email }), {
+        loading: "Sending reset link...",
+        success: (res) => res.data.message || "Reset link sent successfully!",
+        error: (err) =>
+          err?.response?.data?.error || "Something went wrong. Try again.",
+      });
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
