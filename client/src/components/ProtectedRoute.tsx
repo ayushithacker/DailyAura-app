@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -6,7 +6,9 @@ let toastShown = false;
 
 const isTokenValid = () => {
   const token = localStorage.getItem("token");
-  return token && token !== "undefined" && token !== "null" && token.trim() !== "";
+  return (
+    token && token !== "undefined" && token !== "null" && token.trim() !== ""
+  );
 };
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -15,7 +17,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const tokenValid = isTokenValid();
 
   useEffect(() => {
-    // wait until Toaster is mounted
     const timer = setTimeout(() => setReady(true), 100);
     return () => clearTimeout(timer);
   }, []);

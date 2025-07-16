@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
+import api from "../api/api";
 
 const Dashboard: React.FC = () => {
     const { user } = useUser();
@@ -27,11 +28,11 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchJournal = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5050/api/journal", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        // const token = localStorage.getItem("token");
+        const res = await api.get("/journal", {
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         });
 
         const todayEntry = res.data.find((entry: any) => entry.date === todayDateStr);

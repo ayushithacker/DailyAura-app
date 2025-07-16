@@ -1,9 +1,10 @@
-import axios from "axios";
+
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 // put this **inside** the component
 
@@ -46,14 +47,14 @@ const Login: React.FC = () => {
       setErrors(newErrors);
     } else {
       try {
-        const res = await axios.post("http://localhost:5050/api/login", {
+        const res = await api.post("/login", {
           email: formData.email,
           password: formData.password,
         });
 
         localStorage.setItem("token", res.data.token);
-        toast.success("Login successful! 🙌");
-        navigate("/"); // ✅ or /Journal, wherever you want to go after login
+        toast.success("Login successful!");
+        navigate("/"); 
       } catch (err: any) {
         setErrors({ email: "Invalid credentials" });
       }
@@ -102,7 +103,7 @@ const Login: React.FC = () => {
                   errors.password ? "border-red-500" : "border-black"
                 }`}
               />
-              {/* 👁️ Icon inside the input */}
+         
               <span
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600 cursor-pointer"
                 onClick={() => setShowPassword((prev) => !prev)}
@@ -132,7 +133,7 @@ const Login: React.FC = () => {
           <div className="text-center mt-4">
             <p className="text-sm mb-2">OR</p>
             <a
-              href="http://localhost:5050/api/auth/google"
+              href={`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`}
               className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition"
             >
               Continue with Google

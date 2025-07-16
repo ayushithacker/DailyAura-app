@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import api from "../api/api";
 
 const ResetPassword: React.FC = () => {
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState<{
     newPassword?: string;
@@ -17,7 +18,13 @@ const ResetPassword: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { token } = useParams(); // 👈 token from URL
+  const { token } = useParams();
+  useEffect(() => {
+    if (!token) {
+      toast.error("Reset token missing");
+      navigate("/forgot-password");
+    }
+  }, [token, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,8 +51,9 @@ const ResetPassword: React.FC = () => {
     }
 
     try {
+      setLoading(true);
       await toast.promise(
-        axios.post(`http://localhost:5050/api/reset-password/${token}`, {
+        api.post(`/reset-password/${token}`, {
           password: formData.newPassword,
         }),
 
@@ -61,6 +69,8 @@ const ResetPassword: React.FC = () => {
       navigate("/login");
     } catch (err: any) {
       console.log("Reset failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,11 +132,19 @@ const ResetPassword: React.FC = () => {
             )}
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full mt-4 bg-gradient-to-l from-rose-400 via-pink-350 to-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200"
           >
             Reset Password
+          </button> */}
+          <button
+            disabled={loading}
+            className={`w-full mt-4 bg-gradient-to-l from-rose-400 via-pink-350 to-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ${
+              loading && "opacity-50 cursor-not-allowed"
+            }`}
+          >
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </div>

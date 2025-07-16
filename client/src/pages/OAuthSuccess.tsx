@@ -12,7 +12,7 @@ const OAuthSuccess = () => {
     if (token) {
       localStorage.setItem("token", token);
       toast.success("Login successful via Google 🙌");
-      navigate("/"); // Or redirect wherever you want
+      navigate("/"); 
     } else {
       toast.error("OAuth login failed.");
       navigate("/login");

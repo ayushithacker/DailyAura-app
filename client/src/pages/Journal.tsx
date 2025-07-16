@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-
+import toast from "react-hot-toast";
+import api from "../api/api";
 
 const Journal: React.FC = () => {
   const today = new Date().toLocaleDateString("en-IN", {
@@ -10,8 +10,6 @@ const Journal: React.FC = () => {
     month: "long",
     day: "numeric",
   });
-
-
 
   const [chanting, setChanting] = useState("");
   const [rounds, setRounds] = useState("");
@@ -36,56 +34,56 @@ const Journal: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!validateForm()) return;
+    if (!validateForm()) return;
 
-  try {
-    const token = localStorage.getItem("token"); // make sure token is stored at login
+    try {
+      // const token = localStorage.getItem("token"); 
 
-    const response = await axios.post(
-      "/api/journal",
-      {
-        chanting: {
-          status: chanting,
-          rounds: chanting === "yes" ? Number(rounds) : undefined,
+      const response = await api.post(
+        "/journal",
+        {
+          chanting: {
+            status: chanting,
+            rounds: chanting === "yes" ? Number(rounds) : undefined,
+          },
+          reading: { status: reading },
+          katha: { status: katha },
+          gratitude,
         },
-        reading: { status: reading },
-        katha: { status: katha },
-        gratitude,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
+      );
+
+      toast.success(
+        response.data.message || "Journal submitted successfully! 🙏"
+      );
+
+      // Clear form
+      setChanting("");
+      setRounds("");
+      setReading("");
+      setKatha("");
+      setGratitude("");
+      setErrors({});
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        toast.error("You've already submitted today's journal! 📝");
+      } else if (error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Failed to submit journal. Please try again.");
       }
-    );
-
-    toast.success(response.data.message || "Journal submitted successfully! 🙏");
-
-    // Clear form
-    setChanting("");
-    setRounds("");
-    setReading("");
-    setKatha("");
-    setGratitude("");
-    setErrors({});
-  } catch (error: any) {
-    if (error.response?.status === 409) {
-      toast.error("You've already submitted today's journal! 📝");
-    } else if (error.response?.data?.error) {
-      toast.error(error.response.data.error);
-    } else {
-      toast.error("Failed to submit journal. Please try again.");
     }
-  }
-};
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-    
-
       <div className="bg-gradient-to-r from-indigo-100 via-blue-50 to-purple-100 shadow-md rounded-xl p-4 mb-6 text-center italic text-blue-700 font-medium text-sm">
         🌼 “Whatever you do, whatever you eat, whatever you offer or give away,
         and whatever austerities you perform – do that as an offering to Me.” —

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 
 const Profile = () => {
   const [profile, setProfile] = useState({ username: "", email: "" });
@@ -9,11 +9,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        // const token = localStorage.getItem("token");
+        const res = await api.get("/user/profile", {
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
         });
         setProfile(res.data);
       } catch (err) {
@@ -32,7 +32,9 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100 flex items-center justify-center p-6">
       <div className="bg-white shadow-xl rounded-xl max-w-md w-full p-6 border border-blue-200">
-        <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center">👤 My Profile</h2>
+        <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center">
+          👤 My Profile
+        </h2>
 
         <div className="space-y-4 text-gray-700">
           <div>

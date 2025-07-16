@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -18,25 +19,24 @@ const ChangePassword = () => {
     }
 
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
 
       await toast.promise(
-        axios.put(
-          "http://localhost:5050/api/change-password",
+        api.put(
+          "/change-password",
           { currentPassword, newPassword },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //   },
+          // }
         ),
         {
           loading: "Updating password...",
           success: "Password changed successfully!",
-          error:
-            (err) =>
-              err?.response?.data?.error ||
-              "Failed to change password. Try again.",
+          error: (err) =>
+            err?.response?.data?.error ||
+            "Failed to change password. Try again.",
         }
       );
 

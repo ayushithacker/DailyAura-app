@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { getUserProfile } from "../api/userApi";
+import { getUserProfile } from "../api/api";
 
 interface User {
   username: string;
@@ -22,8 +22,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await getUserProfile();
-        setUser(data);
+        const res = await getUserProfile();
+        setUser(res.data);
       } catch (err) {
         console.log("Profile fetch failed");
       }

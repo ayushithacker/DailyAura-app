@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from "../api/api";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const ForgotPassword: React.FC = () => {
     console.log("Sending request to backend...");
     try {
       await toast.promise(
-        axios.post("http://localhost:5050/api/forgot-password", { email }),
+        api.post("/forgot-password", { email }),
         {
           loading: "Sending reset link...",
           success: (res) => res.data.message || "Reset link sent successfully!",

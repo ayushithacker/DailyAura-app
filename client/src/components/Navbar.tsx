@@ -2,53 +2,47 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useUser } from "../context/UserContext";
+import { getUserProfile } from "../api/api"
 
 const Navbar: React.FC = () => {
-    const { user } = useUser();
+  const { user, setUser } = useUser();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  
 
+  // Set login status on first render
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      // true if token exists
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-    console.log(token);
+    setIsLoggedIn(!!token);
   }, []);
+
+  // Fetch user profile whenever path changes
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
 
-      // Example: Fetch username from backend
-      fetch("http://localhost:5050/api/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-     
+      getUserProfile()
+        .then((res) => {
+          setUser(res.data); // ✅ Update user in context
         })
         .catch((err) => {
-          console.error(err);
+          console.error("Failed to fetch profile", err);
           setIsLoggedIn(false);
         });
     } else {
       setIsLoggedIn(false);
     }
-  }, [pathname]);
-const navigate = useNavigate();
+  }, [pathname, setUser]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     setShowDropdown(false);
+    setUser(null); // ✅ Reset user in context
     navigate("/login");
   };
 
@@ -56,14 +50,10 @@ const navigate = useNavigate();
     { name: "Home", path: "/" },
     { name: "Dashboard", path: "/dashboard" },
     { name: "Journal", path: "/journal" },
-    // { name: "Login", path: "/login" },
   ];
 
   return (
-    <nav
-      className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-rose-400 via-pink-350 to-purple-500
-    shadow-lg backdrop-blur-sm"
-    >
+    <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-rose-400 via-pink-350 to-purple-500 shadow-lg backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-white tracking-wide drop-shadow-md">
           🌌 DailyAura
@@ -90,13 +80,13 @@ const navigate = useNavigate();
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="text-white font-semibold hover:text-yellow-300"
               >
-                My Profile 
+                My Profile
               </button>
 
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg py-2 z-50">
                   <div className="px-4 py-2 text-sm text-gray-800 border-b">
-                    👤 {user?.username.toUpperCase() || "User"}
+                    👤 {user?.username?.toUpperCase() || "User"}
                   </div>
                   <Link
                     to="/change-password"

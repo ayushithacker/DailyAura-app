@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 type RegisterFormData = {
   username: string;
@@ -62,7 +63,7 @@ const Register: React.FC = () => {
     setErrors(newErrors);
   } else {
     try {
-      const res = await axios.post("http://localhost:5050/api/register", {
+      const res = await api.post("/register", {
         username: formData.username,
         email: formData.email,
         password: formData.password,
