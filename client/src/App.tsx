@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
             <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/Register" element={<Register />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
+          {/* <Route path="/Dashboard" element={<Dashboard />} /> */}
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
@@ -35,6 +35,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Journal />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
               </ProtectedRoute>
             }
           />
