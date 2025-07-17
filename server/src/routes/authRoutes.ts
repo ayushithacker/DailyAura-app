@@ -51,7 +51,8 @@ router.get(
     });
 
     // redirect to frontend with token
-    res.redirect(`http://localhost:5173/oauth-success?token=${token}`);
+    res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`);
+
   }
 );
 

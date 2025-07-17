@@ -33,6 +33,7 @@ app.use((req, res, next) => {
 const PORT = parseInt(process.env.PORT || "5050"); // <- fixed here
 
 const MONGO_URI = process.env.MONGO_URI;
+console.log(MONGO_URI)
 
 if (!MONGO_URI) {
   throw new Error("Missing MongoDB URI in environment variables");

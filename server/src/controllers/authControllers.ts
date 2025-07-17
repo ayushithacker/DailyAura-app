@@ -76,7 +76,10 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
+export const getUserProfile = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { user: userId } = req as AuthRequest;
 
   try {
@@ -93,12 +96,17 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
   }
 };
 
-export const changePassword = async (req: Request, res: Response): Promise<void> => {
+export const changePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { user: userId } = req as AuthRequest;
   const { currentPassword, newPassword } = req.body;
 
   if (!currentPassword || !newPassword) {
-    res.status(400).json({ error: "Both current and new password are required" });
+    res
+      .status(400)
+      .json({ error: "Both current and new password are required" });
     return;
   }
 
@@ -125,7 +133,6 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
   }
 };
 
-
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
 
@@ -149,7 +156,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    const FRONTEND_URL = process.env.FRONTEND_URL;
+    const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
 
     const emailContent = `
       <h3>Reset Your Password</h3>
