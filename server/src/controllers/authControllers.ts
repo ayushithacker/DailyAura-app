@@ -150,7 +150,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     }
 
     const token = randomBytes(32).toString("hex");
-
+console.log(token,"---token")
     user.resetToken = token;
     user.resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
 
@@ -158,6 +158,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     const FRONTEND_URL = process.env.FRONTEND_URL;
     const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
+    console.log(resetLink,"---resetlik")
 
     const emailContent = `
       <h3>Reset Your Password</h3>
@@ -171,7 +172,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       message: "Reset link sent to your email.",
     });
   } catch (error) {
-    console.error(error);
+    console.error(error);   
     res.status(500).json({ error: "Error sending reset email." });
   }
 };

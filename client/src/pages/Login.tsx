@@ -45,7 +45,7 @@ const Login: React.FC = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      try {
+      try { 
         const res = await api.post("/login", {
           email: formData.email,
           password: formData.password,

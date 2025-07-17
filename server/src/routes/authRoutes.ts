@@ -31,15 +31,13 @@ router.post("/reset-password/:token", async (req: Request, res: Response) => {
 router.put("/change-password", authenticateToken, changePassword);
 router.get("/profile", authenticateToken, getUserProfile);
 
-// ✅ Google OAuth Routes
 
-// Step 1: Redirect user to Google login
 router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-// Step 2: Handle Google callback and send JWT to frontend
+
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { session: false }),
@@ -50,7 +48,7 @@ router.get(
       expiresIn: "1d",
     });
 
-    // redirect to frontend with token
+
     res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`);
 
   }
