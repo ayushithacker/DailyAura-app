@@ -4,12 +4,11 @@ import Journal from "../models/journalSchema";
 import mongoose from "mongoose";
 
 export const journalSave = async (
-  req: AuthRequest,
+  req: Request,
   res: Response
 ): Promise<void> => {
-  // ✅ FIXED: explicitly say Promise<void>
-  const userId = req.user;
-  const { chanting, reading, katha, gratitude } = req.body;
+ 
+ const userId = (req as any).user as string;  const { chanting, reading, katha, gratitude } = req.body;
   console.log("Journal Body:", req.body);
 
   const today = new Date().toISOString().split("T")[0];
@@ -50,9 +49,9 @@ export const journalSave = async (
   }
 };
 
-export const getJournal = async (req: AuthRequest, res: Response) => {
- const userId = new mongoose.Types.ObjectId(req.user as string);
- console.log("req.user:", req.user);
+export const getJournal = async (req: Request, res: Response) => {
+ const userId = new mongoose.Types.ObjectId((req as any).user as string);
+  console.log("req.user:", req.user);
   try {
     const  journal = await Journal.find({user: userId}).sort({date: -1})
     res.json(journal)
