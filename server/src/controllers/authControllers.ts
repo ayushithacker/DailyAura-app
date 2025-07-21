@@ -157,7 +157,7 @@ console.log(token,"---token")
     await user.save();
 
     const FRONTEND_URL = process.env.FRONTEND_URL;
-    const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
+    const resetLink = `${FRONTEND_URL}reset-password/${token}`;
     console.log(resetLink,"---resetlik")
 
     const emailContent = `

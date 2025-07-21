@@ -13,6 +13,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       callbackURL: callbackURL
     },
+
     async (_accessToken, _refreshToken, profile, done) => {
       try {
         const email = profile.emails?.[0]?.value;
@@ -36,6 +37,8 @@ passport.use(
       }
     }
   )
+  
 );
+ console.log(callbackURL)
 
 export default passport;
