@@ -4,7 +4,7 @@ import session from "express-session";
 import passport from "./config/passport";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "../src/routes/authRoutes";
+import authRoutes from "./routes/authRoutes";
 import journalRoutes from "./routes/journalRoutes"
 
 
