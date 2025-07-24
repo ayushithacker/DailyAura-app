@@ -19,7 +19,13 @@ const OAuthSuccess = () => {
     }
   }, [[searchParams, navigate]]);
 
-  return <p className="text-center mt-20 text-lg">Logging in via Google...</p>;
+   return (
+  <div className="text-center mt-20 text-lg">
+    <p>Logging in via Google...</p>
+    <p>Token: {searchParams.get("token") || "No token found"}</p>
+  </div>
+);
+
 };
 
 export default OAuthSuccess;
