@@ -17,7 +17,7 @@ const OAuthSuccess = () => {
       toast.error("OAuth login failed.");
       navigate("/login");
     }
-  }, []);
+  }, [[searchParams, navigate]]);
 
   return <p className="text-center mt-20 text-lg">Logging in via Google...</p>;
 };

@@ -13,6 +13,8 @@ const Login: React.FC = () => {
     password: "",
   });
 
+  const googleAuth = import.meta.env.VITE_API_BASE_URL
+  console.log(googleAuth,"googleauth")
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -132,7 +134,7 @@ const Login: React.FC = () => {
           <div className="text-center mt-4">
             <p className="text-sm mb-2">OR</p>
             <a
-              href={`${import.meta.env.VITE_API_BASE_URL}/auth/google`}
+              href={`${googleAuth}/auth/google`}
               className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition"
             >
               Continue with Google
