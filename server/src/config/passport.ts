@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const callbackURL = `${process.env.BACKEND_URL}/api/auth/google/callback`
-console.log(callbackURL,"callback google auth")
+console.log(callbackURL,"callback")
 passport.use(
   new GoogleStrategy(
     {
