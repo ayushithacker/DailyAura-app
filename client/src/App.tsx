@@ -19,16 +19,14 @@ const App: React.FC = () => {
       {" "}
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
-            <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/Register" element={<Register />} />
-          {/* <Route path="/Dashboard" element={<Dashboard />} /> */}
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-
 
           <Route
             path="/journal"
