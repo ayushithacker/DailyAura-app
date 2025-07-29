@@ -44,23 +44,23 @@ const App: React.FC = () => {
             }
           />
           <Route path="/Mood" element={<Mood />} />
-          
-          {/* Catch-all route for 404s */}
-          <Route path="*" element={
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-                <p className="text-gray-600 mb-4">Page not found</p>
-                <button 
-                  onClick={() => window.location.href = '/'}
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                  Go Home
-                </button>
-              </div>
-            </div>
-          } />
         </Route>
+        
+        {/* Catch-all route for 404s - moved outside Layout */}
+        <Route path="*" element={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+              <p className="text-gray-600 mb-4">Page not found</p>
+              <button 
+                onClick={() => window.location.href = '/'}
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Go Home
+              </button>
+            </div>
+          </div>
+        } />
       </Routes>
     </>
   );

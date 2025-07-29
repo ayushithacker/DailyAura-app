@@ -58,7 +58,11 @@ router.get(
     };
 
     const frontendURL = getFrontendURL();
-    res.redirect(`${frontendURL}/oauth-success?token=${token}`);
+    // Ensure no double slashes by properly joining URLs
+    const redirectURL = frontendURL.endsWith('/') 
+      ? `${frontendURL}oauth-success?token=${token}`
+      : `${frontendURL}/oauth-success?token=${token}`;
+    res.redirect(redirectURL);
   }
 );
 
