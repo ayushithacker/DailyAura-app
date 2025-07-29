@@ -20,8 +20,8 @@ const Login: React.FC = () => {
       // Development: use proxy
       return "/api/auth/google";
     }
-    // Production: use full URL
-    return `${baseURL}/api/auth/google`;
+    // Production: use full URL - baseURL already includes /api
+    return `${baseURL}/auth/google`;
   };
 
   const googleAuthURL = getGoogleAuthURL();
