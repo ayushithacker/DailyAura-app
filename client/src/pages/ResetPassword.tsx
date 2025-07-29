@@ -75,13 +75,13 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="bg-white/40 backdrop-blur-md rounded-xl shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-purple-600 text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+      <div className="bg-white/40 backdrop-blur-md rounded-xl shadow-xl p-6 sm:p-8 max-w-md w-full mx-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 text-center mb-6 sm:mb-8">
           Reset Your Password
         </h1>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
           {/* New Password */}
           <div className="relative">
             <label className="block text-left text-sm font-medium text-gray-700 mb-1">
@@ -94,7 +94,7 @@ const ResetPassword: React.FC = () => {
                 value={formData.newPassword}
                 onChange={handleChange}
                 placeholder="Enter new password"
-                className={`w-full p-2 pr-12 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                className={`w-full p-3 pr-12 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 text-base ${
                   errors.newPassword ? "border-red-500" : "border-black"
                 }`}
               />
@@ -121,7 +121,7 @@ const ResetPassword: React.FC = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Re-enter new password"
-              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 text-base ${
                 errors.confirmPassword ? "border-red-500" : "border-black"
               }`}
             />
@@ -140,7 +140,7 @@ const ResetPassword: React.FC = () => {
           </button> */}
           <button
             disabled={loading}
-            className={`w-full mt-4 bg-gradient-to-l from-rose-400 via-pink-350 to-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ${
+            className={`w-full mt-6 sm:mt-4 bg-gradient-to-l from-rose-400 via-pink-350 to-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 text-base ${
               loading && "opacity-50 cursor-not-allowed"
             }`}
           >

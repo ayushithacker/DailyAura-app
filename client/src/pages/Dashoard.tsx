@@ -45,17 +45,17 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <div className="bg-gradient-to-r from-indigo-100 via-blue-50 to-purple-100 shadow-md rounded-xl p-4 mb-6 text-center italic text-blue-700 font-medium text-sm">
+    <div className="max-w-5xl mx-auto p-4 sm:p-6">
+      <div className="bg-gradient-to-r from-indigo-100 via-blue-50 to-purple-100 shadow-md rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 text-center italic text-blue-700 font-medium text-xs sm:text-sm">
         🪶 “Even a little effort on this path can save one from great fear.” —
         Bhagavad Gita 2.40
       </div>
 
-      <div className="m-6">
-        <p className="text-blue-800 font-bold text-xl my-2">
+      <div className="m-4 sm:m-6">
+        <p className="text-blue-800 font-bold text-lg sm:text-xl my-2">
           Hare Krishna, {user?.username.toUpperCase()}
         </p>
-        <div className="text-md text-gray-600">{todayDisplay}</div>
+        <div className="text-sm sm:text-md text-gray-600">{todayDisplay}</div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {/* 🕉️ Daily Devotion */}

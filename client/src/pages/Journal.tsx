@@ -76,7 +76,7 @@ const Journal: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <div className="bg-gradient-to-r from-indigo-100 via-blue-50 to-purple-100 shadow-md rounded-xl p-4 mb-6 text-center italic text-blue-700 font-medium text-sm">
         🌼 “Whatever you do, whatever you eat, whatever you offer or give away,
         and whatever austerities you perform – do that as an offering to Me.” —

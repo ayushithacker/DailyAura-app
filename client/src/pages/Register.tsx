@@ -89,13 +89,13 @@ const Register: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="bg-white/40 backdrop-blur-md rounded-xl shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-blue-600 text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+      <div className="bg-white/40 backdrop-blur-md rounded-xl shadow-xl p-6 sm:p-8 max-w-md w-full mx-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 text-center mb-6 sm:mb-8">
           Create Your Account
         </h1>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-left text-sm font-medium text-gray-700 mb-1">
               Full Name
@@ -106,7 +106,7 @@ const Register: React.FC = () => {
               value={formData.username}
               onChange={handleChange}
               placeholder="Enter your full name"
-              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-base ${
                 errors.username ? "border-red-500" : "border"
               }`}
             />

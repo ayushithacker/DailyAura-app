@@ -15,7 +15,7 @@ const Layout: React.FC = () => {
 
       <Navbar />
 
-      <div className="pt-20 px-4 max-w-5xl mx-auto">
+      <div className="pt-16 sm:pt-20 px-2 sm:px-4 max-w-5xl mx-auto">
         <main className="min-h-screen">
           <Outlet />
         </main>
