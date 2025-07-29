@@ -1,5 +1,1 @@
-# SPA routing - redirect all routes to index.html
 /*    /index.html   200
-
-# API routes - proxy to backend
-/api/*  https://dailyaura.onrender.com/api/:splat  200
