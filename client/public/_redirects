@@ -1,4 +1,4 @@
-# Specific routes for dynamic paths
+# Handle dynamic routes first
 /reset-password/*    /index.html   200
 /oauth-success    /index.html   200
 

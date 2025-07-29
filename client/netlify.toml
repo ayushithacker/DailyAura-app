@@ -2,6 +2,18 @@
   publish = "dist"
   command = "npm run build"
 
+# Handle dynamic routes properly
+[[redirects]]
+  from = "/reset-password/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/oauth-success"
+  to = "/index.html"
+  status = 200
+
+# Catch-all for SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
