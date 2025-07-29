@@ -13,8 +13,20 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  const googleAuth = import.meta.env.VITE_API_BASE_URL
-  console.log(googleAuth,"googleauth")
+  // Fix Google OAuth URL construction
+  const getGoogleAuthURL = () => {
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+    if (import.meta.env.DEV) {
+      // Development: use proxy
+      return "/api/auth/google";
+    }
+    // Production: use full URL
+    return `${baseURL}/api/auth/google`;
+  };
+
+  const googleAuthURL = getGoogleAuthURL();
+  console.log("Google Auth URL:", googleAuthURL);
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
@@ -134,7 +146,7 @@ const Login: React.FC = () => {
           <div className="text-center mt-4">
             <p className="text-sm mb-2">OR</p>
             <a
-              href={`${googleAuth}/auth/google`}
+              href={googleAuthURL}
               className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition"
             >
               Continue with Google

@@ -27,11 +27,9 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchJournal = async () => {
       try {
-        // const token = localStorage.getItem("token");
+       
         const res = await api.get("/journal", {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
+          
         });
 
         const todayEntry = res.data.find(

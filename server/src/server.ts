@@ -12,44 +12,77 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Enhanced CORS configuration
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL 
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(
   session({
-    secret: "some-session-secret",
+    secret: process.env.SESSION_SECRET || "some-session-secret",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   })
 );
 app.use(passport.initialize());
 
-app.use("/api", authRoutes);
-app.use("/api/journal", journalRoutes);
+// Request logging middleware
 app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.path}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
   next();
 });
 
-const PORT = parseInt(process.env.PORT || "5050"); // <- fixed here
+app.use("/api", authRoutes);
+app.use("/api/journal", journalRoutes);
 
-const MONGO_URI = process.env.MONGO_URI;
-console.log(MONGO_URI)
+const PORT = parseInt(process.env.PORT || "5050");
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGO_URL;
+
+console.log("Environment:", process.env.NODE_ENV);
+console.log("Port:", PORT);
+console.log("MongoDB URI exists:", !!MONGO_URI);
 
 if (!MONGO_URI) {
   throw new Error("Missing MongoDB URI in environment variables");
 }
 
 app.get("/", (req, res) => {
-  res.send("server is running");
+  res.send("DailyAura API server is running");
 });
 
-// ✅ FIXED HERE
-app.listen(PORT, () => {
-  console.log(`Server is started on port ${PORT}`);
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV 
+  });
 });
 
-// Mongo connection
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected!"))
-  .catch((e) => console.error("MongoDB error", e));
+// Start server only after MongoDB connection
+const startServer = async () => {
+  try {
+    // Connect to MongoDB first
+    await mongoose.connect(MONGO_URI);
+    console.log("✅ MongoDB connected successfully!");
+    
+    // Then start the server
+    app.listen(PORT, () => {
+      console.log(`✅ Server is running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();

@@ -4,8 +4,19 @@ import User from "../models/userSchema";
 import dotenv from "dotenv";
 
 dotenv.config();
-const callbackURL = `${process.env.BACKEND_URL}/api/auth/google/callback`
-console.log(callbackURL,"callback")
+
+// Fix callback URL configuration
+const getCallbackURL = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return `${process.env.BACKEND_URL}/api/auth/google/callback`;
+  }
+  // For development, use localhost
+  return `http://localhost:${process.env.PORT || 5050}/api/auth/google/callback`;
+};
+
+const callbackURL = getCallbackURL();
+console.log("Google OAuth Callback URL:", callbackURL);
+
 passport.use(
   new GoogleStrategy(
     {
@@ -37,8 +48,6 @@ passport.use(
       }
     }
   )
-  
 );
- console.log(callbackURL)
 
 export default passport;

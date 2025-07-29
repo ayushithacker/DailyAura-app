@@ -18,17 +18,13 @@ const ChangePassword = () => {
     }
 
     try {
-      // const token = localStorage.getItem("token");
+      
 
       await toast.promise(
         api.put(
           "/change-password",
           { currentPassword, newPassword },
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${token}`,
-          //   },
-          // }
+          
         ),
         {
           loading: "Updating password...",

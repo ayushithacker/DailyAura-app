@@ -39,8 +39,7 @@ const Journal: React.FC = () => {
     if (!validateForm()) return;
 
     try {
-      // const token = localStorage.getItem("token");
-
+  
       const response = await api.post(
         "/journal",
         {
@@ -52,18 +51,13 @@ const Journal: React.FC = () => {
           katha: { status: katha },
           gratitude,
         }
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
+        
       );
 
       toast.success(
         response.data.message || "Journal submitted successfully! 🙏"
       );
 
-      // Clear form
       setChanting("");
       setRounds("");
       setReading("");

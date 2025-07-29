@@ -48,9 +48,17 @@ router.get(
       expiresIn: "1d",
     });
 
+    // Fix redirect URL for different environments
+    const getFrontendURL = () => {
+      if (process.env.NODE_ENV === 'production') {
+        return process.env.FRONTEND_URL;
+      }
+      // For development, use localhost:5173 (Vite default)
+      return 'http://localhost:5173';
+    };
 
-    res.redirect(`${process.env.FRONTEND_URL}/oauth-success?token=${token}`);
-
+    const frontendURL = getFrontendURL();
+    res.redirect(`${frontendURL}/oauth-success?token=${token}`);
   }
 );
 
