@@ -139,6 +139,41 @@ const Navbar: React.FC = () => {
               {item.name}
             </Link>
           ))}
+          
+          {/* Mobile Login/Profile Section */}
+          <div className="border-t border-gray-600 pt-3 mt-3">
+            {isLoggedIn ? (
+              <div className="space-y-2">
+                <div className="px-2 py-1 text-sm text-gray-300 border-b border-gray-600">
+                  👤 {user?.username?.toUpperCase() || "User"}
+                </div>
+                <Link
+                  to="/change-password"
+                  onClick={() => setIsOpen(false)}
+                  className="block text-sm text-gray-200 hover:text-yellow-400 transition"
+                >
+                  🔒 Change Password
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="block w-full text-left text-sm text-red-400 hover:text-red-300 transition"
+                >
+                  🚪 Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="block bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm font-semibold shadow hover:bg-blue-700 transition text-center"
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </nav>
