@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { AuthRequest } from "../middleware/authMiddleware";
 import Journal from "../models/journalSchema";
 import mongoose from "mongoose";
 
@@ -8,7 +7,8 @@ export const journalSave = async (
   res: Response
 ): Promise<void> => {
  
- const userId = (req as any).user as string;  const { chanting, reading, katha, gratitude } = req.body;
+  const userId = (req as any).user as string;
+  const { chanting, reading, katha, gratitude } = req.body;
   console.log("Journal Body:", req.body);
 
   const today = new Date().toISOString().split("T")[0];
@@ -21,7 +21,7 @@ export const journalSave = async (
     !gratitude?.trim()
   ) {
     res.status(400).json({ error: "All fields are required" });
-    return; // ✅ stop further execution
+    return;
   }
 
   try {
@@ -50,10 +50,10 @@ export const journalSave = async (
 };
 
 export const getJournal = async (req: Request, res: Response) => {
- const userId = new mongoose.Types.ObjectId((req as any).user as string);
-  console.log("req.user:", req.user);
+  const userId = new mongoose.Types.ObjectId((req as any).user as string);
+  console.log("req.user:", (req as any).user);
   try {
-    const  journal = await Journal.find({user: userId}).sort({date: -1})
+    const journal = await Journal.find({user: userId}).sort({date: -1})
     res.json(journal)
 
   } catch (error) {

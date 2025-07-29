@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 export interface AuthRequest extends Request {
-  user?: string; // ✅ must be a string (user ID)
+  user?: string; // User ID as string
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "Krishna";
@@ -23,7 +23,7 @@ export const authenticateToken = (
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-    (req as AuthRequest).user = decoded.id; // ✅ only assign userId (string)
+    (req as AuthRequest).user = decoded.id;
     next();
   } catch (error) {
     res.status(403).json({ error: "Invalid token." });
