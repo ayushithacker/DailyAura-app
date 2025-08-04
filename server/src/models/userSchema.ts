@@ -23,7 +23,7 @@ const userSchema: Schema<IUser> = new Schema(
     },
     password: {
       type: String,
-      required: false,
+      required: true,
     },
     resetToken: {
       type: String,

@@ -5,7 +5,9 @@ export interface AuthRequest extends Request {
   user?: string; // User ID as string
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || "Krishna";
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  throw new Error('JWT_SECRET environment variable is required');
+})();
 
 export const authenticateToken = (
   req: Request,

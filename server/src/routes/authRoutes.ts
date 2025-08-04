@@ -12,7 +12,9 @@ import {
 import { authenticateToken } from "../middleware/authMiddleware";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "Krishna";
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  throw new Error('JWT_SECRET environment variable is required');
+})();
 
 // ✅ Traditional Auth Routes
 router.post("/register", (req: Request, res: Response) => {

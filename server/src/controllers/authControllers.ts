@@ -8,7 +8,9 @@ import { randomBytes } from "crypto";
 import { AuthRequest } from "../middleware/authMiddleware";
 import { sendEmail } from "../utils/sendEmail";
 
-const JWT_SECRET = process.env.JWT_SECRET || "Krishna";
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  throw new Error('JWT_SECRET environment variable is required');
+})();
 
 export const registerUser = async (
   req: Request,
