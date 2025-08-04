@@ -29,6 +29,25 @@ const Register: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+    
+    // Real-time password validation
+    if (name === 'password') {
+      if (value.length < 6) {
+        setErrors(prev => ({ ...prev, password: "Password must be at least 6 characters" }));
+      } else {
+        const weakPasswords = ['admin', 'password', '123456', 'qwerty', 'letmein', 'welcome', '12345', '1234', '123'];
+        if (weakPasswords.includes(value.toLowerCase())) {
+          setErrors(prev => ({ ...prev, password: "Please choose a stronger password!" }));
+        } else {
+          setErrors(prev => ({ ...prev, password: undefined }));
+        }
+      }
+    }
   };
 
   const validate = () => {
@@ -46,6 +65,12 @@ const Register: React.FC = () => {
 
     if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
+    } else {
+      // Check for weak passwords
+      const weakPasswords = ['admin', 'password', '123456', 'qwerty', 'letmein', 'welcome', '12345', '1234', '123'];
+      if (weakPasswords.includes(formData.password.toLowerCase())) {
+        newErrors.password = "Please choose a stronger password!";
+      }
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -157,6 +182,9 @@ const Register: React.FC = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
           <div>
             <label className="block text-left text-sm font-medium text-gray-700 mb-1">
