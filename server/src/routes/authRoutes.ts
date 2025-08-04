@@ -10,6 +10,14 @@ import {
   resetPassword,
 } from "../controllers/authControllers";
 import { authenticateToken } from "../middleware/authMiddleware";
+import {
+  validateRegistration,
+  validateLogin,
+  validatePasswordChange,
+  validateForgotPassword,
+  validateResetPassword,
+  handleValidationErrors
+} from "../middleware/validation";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || (() => {

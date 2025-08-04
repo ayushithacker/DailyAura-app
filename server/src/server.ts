@@ -5,7 +5,9 @@ import passport from "./config/passport";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
-import journalRoutes from "./routes/journalRoutes"
+import journalRoutes from "./routes/journalRoutes";
+import { logger, requestLogger } from "./utils/logger";
+import { errorHandler, notFound } from "./middleware/errorHandler";
 
 
 dotenv.config();
@@ -38,11 +40,8 @@ app.use(
 );
 app.use(passport.initialize());
 
-// Request logging middleware
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  next();
-});
+// Structured request logging middleware
+app.use(requestLogger);
 
 app.use("/api", authRoutes);
 app.use("/api/journal", journalRoutes);
@@ -50,11 +49,14 @@ app.use("/api/journal", journalRoutes);
 const PORT = parseInt(process.env.PORT || "5050");
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGO_URL;
 
-console.log("Environment:", process.env.NODE_ENV);
-console.log("Port:", PORT);
-console.log("MongoDB URI exists:", !!MONGO_URI);
+logger.info('Server configuration', {
+  environment: process.env.NODE_ENV,
+  port: PORT,
+  mongoUriExists: !!MONGO_URI
+}, 'SERVER_STARTUP');
 
 if (!MONGO_URI) {
+  logger.error('Missing MongoDB URI in environment variables', undefined, 'SERVER_STARTUP');
   throw new Error("Missing MongoDB URI in environment variables");
 }
 
@@ -67,24 +69,34 @@ app.get("/health", (req, res) => {
   res.json({ 
     status: "ok", 
     timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
     environment: process.env.NODE_ENV 
   });
 });
+
+// 404 handler
+app.use(notFound);
+
+// Error handling middleware
+app.use(errorHandler);
 
 // Start server only after MongoDB connection
 const startServer = async () => {
   try {
     // Connect to MongoDB first
     await mongoose.connect(MONGO_URI);
-    console.log("✅ MongoDB connected successfully!");
+    logger.info('MongoDB connected successfully', { uri: MONGO_URI }, 'SERVER_STARTUP');
     
     // Then start the server
     app.listen(PORT, () => {
-      console.log(`✅ Server is running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      logger.info('Server started successfully', { 
+        port: PORT, 
+        environment: process.env.NODE_ENV || 'development' 
+      }, 'SERVER_STARTUP');
     });
   } catch (error) {
-    console.error("❌ Failed to start server:", error);
+    logger.error('Failed to start server', error as Error, 'SERVER_STARTUP');
     process.exit(1);
   }
 };

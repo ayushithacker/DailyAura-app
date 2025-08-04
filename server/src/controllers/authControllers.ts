@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/userSchema";
 import jwt from "jsonwebtoken";
-import { error } from "console";
 import { randomBytes } from "crypto";
+import { logger } from "../utils/logger";
 
 import { AuthRequest } from "../middleware/authMiddleware";
 import { sendEmail } from "../utils/sendEmail";
@@ -17,8 +17,12 @@ export const registerUser = async (
   res: Response
 ): Promise<void> => {
   const { username, email, password } = req.body;
+  const startTime = Date.now();
+
+  logger.info('Registration attempt', { username, email }, 'AUTH_CONTROLLER');
 
   if (!username || !email || !password) {
+    logger.warn('Registration failed - missing fields', { username, email }, 'AUTH_CONTROLLER');
     res.status(400).json({ error: "All fields are required!" });
     return;
   }
@@ -26,24 +30,36 @@ export const registerUser = async (
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      logger.warn('Registration failed - email already exists', { email }, 'AUTH_CONTROLLER');
       res.status(400).json({ error: "Email already in use!" });
+      return;
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, email, password: hashPassword });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully!" }); // ✅ return an object
+    const duration = Date.now() - startTime;
+    logger.logRegistration(username, email, true, 'AUTH_CONTROLLER');
+    logger.logPerformance('User registration', duration, 'AUTH_CONTROLLER');
+
+    res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error." }); // ✅ return an object
+    const duration = Date.now() - startTime;
+    logger.error('Registration failed', error as Error, 'AUTH_CONTROLLER');
+    logger.logPerformance('User registration (failed)', duration, 'AUTH_CONTROLLER');
+    res.status(500).json({ error: "Server error." });
   }
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+  const startTime = Date.now();
+
+  logger.info('Login attempt', { email }, 'AUTH_CONTROLLER');
 
   if (!email || !password) {
+    logger.warn('Login failed - missing credentials', { email }, 'AUTH_CONTROLLER');
     res.status(400).json({ error: "Email and passwords are required!" });
     return;
   }
@@ -52,17 +68,23 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     const user = await User.findOne({ email });
 
     if (!user) {
+      logger.warn('Login failed - user not found', { email }, 'AUTH_CONTROLLER');
       res.status(400).json({ error: "User not found!" });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      logger.warn('Login failed - invalid password', { email }, 'AUTH_CONTROLLER');
       res.status(401).json({ error: "Invalid password!" });
       return;
     }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1d" });
+
+    const duration = Date.now() - startTime;
+    logger.logAuthAttempt(email, true, 'AUTH_CONTROLLER');
+    logger.logPerformance('User login', duration, 'AUTH_CONTROLLER');
 
     res.status(200).json({
       message: "Login successful!",
@@ -74,6 +96,9 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    logger.error('Login failed', error as Error, 'AUTH_CONTROLLER');
+    logger.logPerformance('User login (failed)', duration, 'AUTH_CONTROLLER');
     res.status(500).json({ error: "Server error during login" });
   }
 };
