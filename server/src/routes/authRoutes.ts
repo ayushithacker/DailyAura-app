@@ -24,21 +24,21 @@ const JWT_SECRET = process.env.JWT_SECRET || (() => {
   throw new Error('JWT_SECRET environment variable is required');
 })();
 
-// ✅ Traditional Auth Routes
-router.post("/register", (req: Request, res: Response) => {
+// ✅ Traditional Auth Routes with validation
+router.post("/register", validateRegistration, handleValidationErrors, (req: Request, res: Response) => {
   registerUser(req, res);
 });
 
-router.post("/login", (req: Request, res: Response) => {
+router.post("/login", validateLogin, handleValidationErrors, (req: Request, res: Response) => {
   loginUser(req, res);
 });
 
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", async (req: Request, res: Response) => {
+router.post("/forgot-password", validateForgotPassword, handleValidationErrors, forgotPassword);
+router.post("/reset-password/:token", validateResetPassword, handleValidationErrors, async (req: Request, res: Response) => {
   await resetPassword(req, res); // ✅ await async function
 });
 
-router.put("/change-password", authenticateToken, changePassword);
+router.put("/change-password", authenticateToken, validatePasswordChange, handleValidationErrors, changePassword);
 router.get("/profile", authenticateToken, getUserProfile);
 
 

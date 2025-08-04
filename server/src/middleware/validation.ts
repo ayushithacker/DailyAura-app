@@ -2,7 +2,7 @@ import { body, validationResult, ValidationChain } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 
 // Handle validation errors
-export const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+export const handleValidationErrors = (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorDetails = errors.array().map(err => ({
@@ -11,10 +11,11 @@ export const handleValidationErrors = (req: Request, res: Response, next: NextFu
       value: err.type === 'field' ? err.value : undefined
     }));
     
-    return res.status(400).json({
+    res.status(400).json({
       error: 'Validation failed',
       details: errorDetails
     });
+    return;
   }
   next();
 };
